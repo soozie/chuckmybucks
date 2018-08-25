@@ -1,0 +1,16 @@
+{
+  "name": "check-my-bucks",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "node-fetch": "^2.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {}
+}

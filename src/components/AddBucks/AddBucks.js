@@ -21,17 +21,6 @@ class AddBucks extends Component {
     this.getTotalBucks = this.getTotalBucks.bind(this);
   }
 
-  componentWillMount() {
-    fetch('http://localhost:4000/api/getExpences')
-    .then(response => { return response.json(); })
-    .then(jsonResponse => {
-      this.setState({
-        expences: jsonResponse
-      });
-    })
-    .catch(error => { return error; });
-  }
-
   getUserName(event) {
     // logica to get the value of input element and return it
     this.setState({ input1: event.target.value });
@@ -76,6 +65,7 @@ class AddBucks extends Component {
         input3: '',
         input4: ''
       });
+      console.log(jsonResponse);
     })
     .catch(error => {
       console.log(error);
@@ -99,34 +89,40 @@ class AddBucks extends Component {
   }
 
 
-
   render() {
+
+    let hiddenClassName = '';
+    if (this.props.showaddBucks === 'inProgress') {
+      hiddenClassName = 'AddBucks--fadeOut';
+    } else if (this.props.showaddBucks === 'hidden') {
+      hiddenClassName = 'AddBucks--hidden';
+    }
     return (
-      <div className="AddBucks">
-      <div className="saveContainer">
-        <div className="topSaveContainer">
-          <div className="topContainer uno">
-            <input className="input1" value={this.state.input1} placeholder="Who?" onChange={this.getUserName}></input>
+      <div className={`AddBucks ${hiddenClassName}`}>
+        <div className="saveContainer">
+          <div className="topSaveContainer">
+            <div className="topContainer uno">
+              <input className="input1" value={this.state.input1} placeholder="Who?" onChange={this.getUserName}></input>
+            </div>
+            <div className="topContainer due">
+              <input className="input2" value={this.state.input2} placeholder="How much?" onChange={this.getBucksAmount}></input>
+            </div>
+            <div className="topContainer tre">
+              <input className="input3" value={this.state.input3} placeholder="What?" onChange={this.getWhen}></input>
+            </div>
+            <div className="topContainer quattro">
+              <input className="input4" value={this.state.input4} placeholder="When?" onChange={this.getWhat}></input>
+            </div>
           </div>
-          <div className="topContainer due">
-            <input className="input2" value={this.state.input2} placeholder="How much?" onChange={this.getBucksAmount}></input>
-          </div>
-          <div className="topContainer tre">
-            <input className="input3" value={this.state.input3} placeholder="What?" onChange={this.getWhen}></input>
-          </div>
-          <div className="topContainer quattro">
-            <input className="input4" value={this.state.input4} placeholder="When?" onChange={this.getWhat}></input>
+          <div className="bottomSaveContainer">
+            <div className="bottomContainer left">
+              <button className="button" type="button" onClick={this.addData}>Save</button>
+            </div>
+            <div className="bottomContainer right">
+              <button className="button" type="button" onClick={this.startCalculation}>Get Total Bucks</button>
+            </div>
           </div>
         </div>
-        <div className="bottomSaveContainer">
-          <div className="bottomContainer left">
-            <button className="button" type="button" onClick={this.addData}>Save</button>
-          </div>
-          <div className="bottomContainer right">
-            <button className="button" type="button" onClick={this.startCalculation}>Get Total Bucks</button>
-          </div>
-        </div>
-      </div>
       </div>
     );
   }

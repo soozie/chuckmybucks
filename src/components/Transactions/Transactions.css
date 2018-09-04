@@ -1,0 +1,21 @@
+.Transactions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  opacity: 1;
+  transition: opacity 400ms ease-in-out;
+}
+
+.Transactions--hidden {
+  display: none;
+}
+
+.Transactions--fadeOut {
+  opacity: 0;
+}
+
+.Transactions__table {
+  border: solid 1px grey;
+  border-radius: 2px;
+}

@@ -1,3 +1,17 @@
+.AddBucks {
+  display: flex;
+  opacity: 1;
+  transition: opacity 400ms ease-in-out;
+}
+
+.AddBucks--hidden {
+  display: none;
+}
+
+.AddBucks--fadeOut {
+  opacity: 0;
+}
+
 .saveContainer {
   text-align: center;
   height: 250px;

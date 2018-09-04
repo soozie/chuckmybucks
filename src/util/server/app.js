@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const fetch = require('node-fetch');
 const express = require("express");
 const http = require("http");
@@ -68,11 +69,14 @@ app.post('/api/saveExpence', function(req, res) {
       dataObj = JSON.parse(data);
       if (dataObj.expences) {
         const updatedExpences = [ ...dataObj.expences ];
+        const id = _.uniqueId();
+        console.log(id);
         updatedExpences.push({
           userName,
           bucksAmount,
           when,
-          what
+          what,
+          id
         });
         newJsonData = {
           ...dataObj,

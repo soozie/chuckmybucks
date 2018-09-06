@@ -1,77 +1,80 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import * as api from '../../modules/addBucks/api';
 import './AddBucks.css';
 
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  button: {
+    margin: theme.spacing.unit,
+    backgroundColor: 'white',
+  },
+});
+
 class AddBucks extends Component {
+  static get propTypes() {
+    return {
+      classes: PropTypes.object.isRequired
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      input1: '',
-      input2: '',
-      input3: '',
-      input4: '',
-      expences: [],
+      who: '',
+      howMuch: '',
+      when: '',
+      what: '',
+      expences: []
     };
 
-    this.getUserName = this.getUserName.bind(this);
-    this.getBucksAmount = this.getBucksAmount.bind(this);
-    this.getWhen = this.getWhen.bind(this);
-    this.getWhat = this.getWhat.bind(this);
     this.addData = this.addData.bind(this);
     this.startCalculation = this.startCalculation.bind(this);
     this.getTotalBucks = this.getTotalBucks.bind(this);
   }
 
-  getUserName(event) {
-    // logica to get the value of input element and return it
-    this.setState({ input1: event.target.value });
-  }
-
-  getBucksAmount(event) {
-    // logica to get the value of input element and return it
-    this.setState({ input2: event.target.value });
-  }
-
-  getWhen(event) {
-    // logica to get the value of input element and return it
-    this.setState({ input3: event.target.value });
-  }
-
-  getWhat(event) {
-    // logica to get the value of input element and return it
-    this.setState({ input4: event.target.value });
+  setValue(name, value) {
+    console.log(name, value);
+    this.setState({ [name]: value });
   }
 
   addData() {
     const expense = {
-      userName: this.state.input1,
-      bucksAmount: this.state.input2,
-      when: this.state.input3,
-      what: this.state.input4
+      userName: this.state.who,
+      bucksAmount: this.state.howMuch,
+      when: this.state.when,
+      what: this.state.what
     };
 
-    fetch(`http://localhost:4000/api/saveExpence`, {
-      method: "POST",
-      body: JSON.stringify(expense),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => { return response.json(); })
-    .then(jsonResponse => {
-      this.setState({
-        expences: jsonResponse,
-        input1: '',
-        input2: '',
-        input3: '',
-        input4: ''
+    api.saveExpense(expense)
+      .then((expense) => {
+        this.setState({
+          userName: '',
+          bucksAmount: '',
+          when: '',
+          what: ''
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      console.log(jsonResponse);
-    })
-    .catch(error => {
-      console.log(error);
-
-      return error;
-    });
   }
 
   getTotalBucks() {
@@ -90,42 +93,59 @@ class AddBucks extends Component {
 
 
   render() {
+    const {
+      classes
+    } = this.props;
 
-    let hiddenClassName = '';
-    if (this.props.showaddBucks === 'inProgress') {
-      hiddenClassName = 'AddBucks--fadeOut';
-    } else if (this.props.showaddBucks === 'hidden') {
-      hiddenClassName = 'AddBucks--hidden';
-    }
     return (
-      <div className={`AddBucks ${hiddenClassName}`}>
-        <div className="saveContainer">
-          <div className="topSaveContainer">
-            <div className="topContainer uno">
-              <input className="input1" value={this.state.input1} placeholder="Who?" onChange={this.getUserName}></input>
-            </div>
-            <div className="topContainer due">
-              <input className="input2" value={this.state.input2} placeholder="How much?" onChange={this.getBucksAmount}></input>
-            </div>
-            <div className="topContainer tre">
-              <input className="input3" value={this.state.input3} placeholder="What?" onChange={this.getWhen}></input>
-            </div>
-            <div className="topContainer quattro">
-              <input className="input4" value={this.state.input4} placeholder="When?" onChange={this.getWhat}></input>
-            </div>
-          </div>
-          <div className="bottomSaveContainer">
-            <div className="bottomContainer left">
-              <button className="button" type="button" onClick={this.addData}>Save</button>
-            </div>
-            <div className="bottomContainer right">
-              <button className="button" type="button" onClick={this.startCalculation}>Get Total Bucks</button>
-            </div>
-          </div>
-        </div>
+      <div className='AddBucks'>
+        <Paper className={classes.root} elevation={1}>
+          <TextField
+            id="name"
+            label="Name"
+            placeholder="Who?"
+            className={classes.textField}
+            value={this.state.who}
+            onChange={(e) => {this.setValue('who', e.target.value);}}
+            margin="normal"
+          />
+          <TextField
+            id="amount"
+            label="Amount"
+            placeholder="How much?"
+            className={classes.textField}
+            value={this.state.howMuch}
+            onChange={(e) => {this.setValue('howMuch', e.target.value);}}
+            margin="normal"
+          />
+          <TextField
+            id="date"
+            label="Date"
+            placeholder="When?"
+            className={classes.textField}
+            value={this.state.when}
+            onChange={(e) => {this.setValue('when', e.target.value);}}
+            margin="normal"
+          />
+          <TextField
+            id="type"
+            label="Type"
+            placeholder="What?"
+            className={classes.textField}
+            value={this.state.what}
+            onChange={(e) => {this.setValue('what', e.target.value);}}
+            margin="normal"
+          />
+        </Paper>
+        <Button variant="contained" className={classes.button} onClick={this.addData}>
+          Save
+        </Button>
+        <Button variant="contained" className={classes.button} onClick={this.startCalculation}>
+          Get Total Bucks
+        </Button>
       </div>
     );
   }
 }
 
-export default AddBucks;
+export default withStyles(styles)(AddBucks);

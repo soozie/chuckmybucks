@@ -1,53 +1,44 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import AddBucks from '../AddBucks/AddBucks.js';
 import Transactions from '../Transactions/Transactions.js';
 
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+    backgroundColor: 'white',
+  },
+});
+
 class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      addBucksView: 'visible', // 3 possible values: inProgress hidden visible
-      transactionsView: 'hidden'
+  static get propTypes() {
+    return {
+      classes: PropTypes.object.isRequired
     };
-    this.handleShowView = this.handleShowView.bind(this);
   }
 
-  handleShowView() {
-    if (this.state.addBucksView === 'visible' && this.state.transactionsView === 'hidden') {
-      this.setState({
-        addBucksView: 'inProgress',
-        transactionsView: 'inProgress'
-      });
-      setTimeout(() => {
-        this.setState({
-          addBucksView: 'hidden',
-          transactionsView: 'visible'
-        });
-      }, 400);
-    } else if (this.state.addBucksView === 'hidden' && this.state.transactionsView === 'visible') {
-      this.setState({
-        addBucksView: 'inProgress',
-        transactionsView: 'inProgress'
-      });
-      setTimeout(() => {
-        this.setState({
-          addBucksView: 'visible',
-          transactionsView: 'hidden'
-        });
-      }, 400);
-    }
+  constructor(props) {
+    super(props);
+
 
   }
 
   render() {
+    const {
+      classes
+    } = this.props;
     return (
       <div className="Main">
-        <AddBucks showaddBucks={this.state.addBucksView}/>
-        <Transactions showStats={this.state.transactionsView} />
-        <button className="Main__button" type="button" onClick={this.handleShowView}>Show Transactions</button>
+        <AddBucks />
+        <Transactions />
+        <Button variant="contained" className={classes.button}>
+          Show Transactions
+        </Button>
       </div>
     );
   }
 }
 
-export default Main;
+export default withStyles(styles) (Main);

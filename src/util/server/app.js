@@ -59,6 +59,7 @@ app.post('/api/saveExpence', function(req, res) {
   const bucksAmount = req.body.bucksAmount;
   const when = req.body.when;
   const what = req.body.what;
+  const note = req.body.note;
 
   fs.readFile('data.json', 'utf8', (err, data) => {
     let response;
@@ -76,6 +77,7 @@ app.post('/api/saveExpence', function(req, res) {
           bucksAmount,
           when,
           what,
+          note,
           id
         });
         newJsonData = {

@@ -1,18 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
+import React, { Component } from 'react';
+import * as api from '../../modules/addBucks/api';
+import TransactionsRender from './TransactionsRender.js';
 
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
   table: {
@@ -20,40 +13,69 @@ const styles = theme => ({
   },
 });
 
-const Transactions = ({ classes, expenses }) => (
-  <Paper className={classes.root}>
-    <Table className={classes.table}>
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell numeric>Amount</TableCell>
-          <TableCell numeric>Date</TableCell>
-          <TableCell numeric>Type</TableCell>
-          <TableCell numeric>Note</TableCell>
-        </TableRow>
-      </TableHead>
-    <TableBody>
-    {
-      expenses.map(row => (
-        <TableRow key={row.id}>
-          <TableCell component="th" scope="row">
-            {row.userName}
-          </TableCell>
-          <TableCell numeric>{row.bucksAmount}</TableCell>
-          <TableCell numeric>{row.when}</TableCell>
-          <TableCell numeric>{row.what}</TableCell>
-          <TableCell numeric>{row.note}</TableCell>
-        </TableRow>
-      ))
-    }
-    </TableBody>
-    </Table>
-  </Paper>
-);
+class Transactions extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userName: '',
+      bucksAmount: '',
+      when: '',
+      what: '',
+      note: '',
+      expenses: []
+    };
 
-Transactions.propTypes = {
-  classes: PropTypes.object.isRequired,
-  expenses: PropTypes.array.isRequired
-};
+    this.getData = this.getData.bind(this);
+    this.getTotalBucks = this.getTotalBucks.bind(this);
+    this.startCalculation = this.startCalculation.bind(this);
+  }
 
-export default withStyles(styles)(Transactions);
+  componentDidMount() {
+    console.log('will mount');
+    this.getData();
+  }
+
+  getData() {
+    console.log('getting data');
+    api.getExpences()
+    .then((response) => {
+      console.log('setting state', response);
+      if (response.length) {
+        this.setState({
+          expenses: response
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  getTotalBucks() {
+    let totalBucks = 0;
+    console.log(this.state.expenses);
+    this.state.expenses.forEach((expense) => {
+      totalBucks += parseFloat(expense.bucksAmount);
+    });
+
+    return totalBucks;
+  }
+
+  startCalculation() {
+    let totalBucks = this.getTotalBucks();
+    console.log('The total is ' + totalBucks);
+  }
+
+  render () {
+    const {
+      classes
+    } = this.props;
+    console.log(this.state.expenses);
+    return (
+      <TransactionsRender expenses={this.state.expenses}/>
+    )
+  }
+
+}
+
+export default Transactions;

@@ -1,0 +1,15 @@
+.Navigation {
+  width: 100%;
+}
+
+.hover:hover {
+    background-color: #ffccbc !important;
+}
+
+.hover:active {
+    background-color: #ffccbc!important;
+}
+
+.Navigation__containerView {
+  padding: 82px 16px 16px;
+}

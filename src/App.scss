@@ -14,8 +14,11 @@ html {
 
 
   body {
+    width: 100%;
+
     #root {
       height: 100%;
+      width: 100%;
 
       .Main {
         display: flex;

@@ -9,7 +9,7 @@ const app = express();
 const port = 4000;
 
 const INITIAL_DATA = {
-  expences: [],
+  expenses: [],
   users: []
 }
 
@@ -56,8 +56,8 @@ const checkData = async () => {
 
 checkData();
 
-app.post('/api/saveExpence', function(req, res) {
-  console.log('Saving expence...');
+app.post('/api/saveExpense', function(req, res) {
+  console.log('Saving expense...');
   const userName = req.body.userName;
   const bucksAmount = req.body.bucksAmount;
   const when = req.body.when;
@@ -71,11 +71,11 @@ app.post('/api/saveExpence', function(req, res) {
     } else {
       let newJsonData;
       dataObj = JSON.parse(data);
-      if (dataObj.expences) {
-        const updatedExpences = [ ...dataObj.expences ];
+      if (dataObj.expenses) {
+        const updatedExpenses = [ ...dataObj.expenses ];
         const id = _.uniqueId();
 
-        updatedExpences.push({
+        updatedExpenses.push({
           userName,
           bucksAmount,
           when,
@@ -85,10 +85,10 @@ app.post('/api/saveExpence', function(req, res) {
         });
         newJsonData = {
           ...dataObj,
-          expences: updatedExpences
+          expenses: updatedExpenses
         };
         fs.writeFile('data.json', JSON.stringify(newJsonData), 'utf8', (attrs) => {});
-        response = updatedExpences;
+        response = updatedExpenses;
       } else {
         response = { error: "We broke!" };
       }
@@ -101,6 +101,7 @@ app.post('/api/saveExpence', function(req, res) {
 app.post('/api/saveUser', function(req, res) {
   console.log('Saving user...');
   const userName = req.body.userName;
+  const salary = req.body.salary;
 
   fs.readFile('data.json', 'utf8', (err, data) => {
     let response;
@@ -114,7 +115,9 @@ app.post('/api/saveUser', function(req, res) {
         const id = _.uniqueId();
 
         updatedUsers.push({
-          userName
+          userName,
+          salary,
+          id
         });
         newJsonData = {
           ...dataObj,
@@ -131,8 +134,44 @@ app.post('/api/saveUser', function(req, res) {
   });
 });
 
-app.get('/api/getExpences', async function(req, res) {
-  console.log('Getting expences...');
+app.post('/api/saveCategory', function(req, res) {
+  console.log('Saving category...');
+  const name = req.body.name;
+
+  fs.readFile('data.json', 'utf8', (err, data) => {
+    let response;
+    if (err) {
+      response = { error: "We broke!" };
+    } else {
+      let newJsonData;
+      dataObj = JSON.parse(data);
+      if (dataObj.categories) {
+        const updatedCategories = [ ...dataObj.categories ];
+        const id = _.uniqueId();
+
+        updatedCategories.push({
+          name,
+          id
+        });
+        newJsonData = {
+          ...dataObj,
+          categories: updatedCategories
+        };
+        fs.writeFile('data.json', JSON.stringify(newJsonData), 'utf8', (attrs) => {});
+        response = updatedCategories;
+      } else {
+        response = { error: "We broke!" };
+      }
+    }
+
+    res.json(response);
+  });
+});
+
+
+
+app.get('/api/getExpenses', async function(req, res) {
+  console.log('Getting expenses...');
   let response;
 
   fs.readFile('data.json', 'utf8', (err, data) => {
@@ -140,25 +179,12 @@ app.get('/api/getExpences', async function(req, res) {
       response = { error: "We broke!" };
     } else {
       dataObj = JSON.parse(data);
-      response = dataObj.expences;
+      response = dataObj.expenses;
     }
     res.json(response);
   });
 });
 
-app.get('/api/resetExpences', async function(req, res) {
-  console.log('Resetting expences...');
-
-  fs.writeFile('data.json', JSON.stringify({
-    ...INITIAL_DATA,
-    expences: []
-  }), 'utf8', (attrs) => {
-    res.json({
-      ok: true,
-      ...INITIAL_DATA
-    });
-  });
-});
 
 app.get('/api/getUsers', async function(req, res) {
   console.log('Getting users...');
@@ -175,6 +201,34 @@ app.get('/api/getUsers', async function(req, res) {
   });
 });
 
+app.get('/api/getCategories', async function(req, res) {
+  console.log('Getting categories...');
+  let response;
+
+  fs.readFile('data.json', 'utf8', (err, data) => {
+    if (err) {
+      response = { error: "We broke!" };
+    } else {
+      dataObj = JSON.parse(data);
+      response = dataObj.categories;
+    }
+    res.json(response);
+  });
+});
+
+app.get('/api/resetExpenses', async function(req, res) {
+  console.log('Resetting expenses...');
+
+  fs.writeFile('data.json', JSON.stringify({
+    ...INITIAL_DATA,
+    expenses: []
+  }), 'utf8', (attrs) => {
+    res.json({
+      ok: true,
+      expenses: []
+    });
+  });
+});
 
 app.get('/api/resetUsers', async function(req, res) {
   console.log('Resetting users...');
@@ -185,7 +239,21 @@ app.get('/api/resetUsers', async function(req, res) {
   }), 'utf8', (attrs) => {
     res.json({
       ok: true,
-      ...INITIAL_DATA
+      users: []
+    });
+  });
+});
+
+app.get('/api/resetCategories', async function(req, res) {
+  console.log('Resetting categories...');
+
+  fs.writeFile('data.json', JSON.stringify({
+    ...INITIAL_DATA,
+    categories: []
+  }), 'utf8', (attrs) => {
+    res.json({
+      ok: true,
+      categories: []
     });
   });
 });

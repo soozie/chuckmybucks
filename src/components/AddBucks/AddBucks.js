@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import lottie from 'lottie-web';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import * as api from '../../modules/addBucks/api';
+import AddUser from '../AddUser/AddUser.js';
 import './AddBucks.css';
 
 const styles = theme => ({
@@ -53,12 +55,58 @@ class AddBucks extends Component {
       when: '',
       what: '',
       note: '',
-      expenses: []
+      expenses: [],
+      requestStatus: 'default',
+      users: [],
+      categories: []
     };
 
+    this.getUsers = this.getUsers.bind(this);
+    this.getCategories = this.getCategories.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.setValue = this.setValue.bind(this);
     this.addData = this.addData.bind(this);
+
+    this.loading = null;
+    this.saved = null;
+  }
+
+  componentWillMount() {
+    this.getUsers();
+    this.getCategories();
+    console.log('componentWillMount');
+  }
+
+  getUsers() {
+    console.log('getting users');
+    api.getUsers()
+    .then((response) => {
+      console.log('setting state', response);
+      if (response.length) {
+        this.setState({
+          users: response
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  getCategories() {
+    console.log('getting categories');
+    api.getCategories()
+    .then((response) => {
+      console.log('setting state', response);
+      if (response.length) {
+        this.setState({
+          categories: response
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   setValue(name, value) {
@@ -70,6 +118,23 @@ class AddBucks extends Component {
   }
 
   addData() {
+    this.setState({
+      requestStatus: 'loading'
+    });
+
+    if (!this.loading) {
+      this.loading = lottie.loadAnimation({
+        container: document.getElementById('loading'), // the dom element that will contain the animation
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        path: '/progress.json' // the path to the animation json
+      });
+      this.loading.play();
+    } else {
+      this.loading.play();
+    }
+
     const expense = {
       userName: this.state.userName,
       bucksAmount: this.state.bucksAmount,
@@ -79,23 +144,58 @@ class AddBucks extends Component {
     };
 
     if (checkProperties(expense)) {
-      api.saveExpense(expense)
-      .then((expenses) => {
-        console.log(expenses);
-        this.setState({
-          userName: '',
-          bucksAmount: '',
-          when: '',
-          what: '',
-          note: '',
-          expenses
+      setTimeout(() => {
+        api.saveExpense(expense)
+        .then((expenses) => {
+          console.log(expenses);
+          this.setState({
+            userName: '',
+            bucksAmount: '',
+            when: '',
+            what: '',
+            note: '',
+            expenses,
+            requestStatus: 'saved'
+          });
+
+          this.loading.destroy();
+          this.loading = null;
+
+          if (!this.saved) {
+            this.saved = lottie.loadAnimation({
+              container: document.getElementById('loading'), // the dom element that will contain the animation
+              renderer: 'svg',
+              loop: false,
+              autoplay: false,
+              path: '/anima.json' // the path to the animation json
+            });
+            this.saved.play();
+          } else {
+            this.saved.play();
+          }
+
+          setTimeout(() => {
+            this.saved.destroy();
+            this.saved = null;
+            this.setState({
+              requestStatus: 'default'
+            });
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+          this.setState({
+            requestStatus: 'default'
+          });
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }, 2000);
     } else {
-      alert('Fill in all the details!');
+      console.error('Fill in all the details!');
+      setTimeout(() => {
+        this.setState({
+          requestStatus: 'default'
+        });
+      }, 2000);
     }
   }
 
@@ -103,6 +203,26 @@ class AddBucks extends Component {
     const {
       classes
     } = this.props;
+
+    let hiddenDefault = '';
+    let hiddenLoading = '';
+    let hiddenSaved = '';
+
+    switch (this.state.requestStatus) {
+      case 'default':
+      hiddenDefault = '';
+      hiddenLoading = 'hidden';
+        break;
+      case 'loading':
+      hiddenLoading = '';
+      hiddenDefault = 'hidden';
+        break;
+      case 'saved':
+      hiddenDefault = 'hidden';
+      hiddenLoading = '';
+        break;
+    }
+
     return (
       <div className='AddBucks'>
         <Paper className={classes.root} elevation={1}>
@@ -119,9 +239,11 @@ class AddBucks extends Component {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value="Nico">Nico</MenuItem>
-                <MenuItem value="Susa">Susa</MenuItem>
-                <MenuItem value="Zlata">Zlata</MenuItem>
+                {
+                  this.state.users.map((user) => {
+                    return (<MenuItem value={user.userName}>{user.userName}</MenuItem>)
+                  })
+                }
               </Select>
             </FormControl>
             <TextField
@@ -159,17 +281,11 @@ class AddBucks extends Component {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value="Food">Food</MenuItem>
-                <MenuItem value="Drink">Drink</MenuItem>
-                <MenuItem value="Shopping">Shopping</MenuItem>
-                <MenuItem value="Grocery">Grocery</MenuItem>
-                <MenuItem value="Tobacco">Tobacco</MenuItem>
-                <MenuItem value="Bills">Bills</MenuItem>
-                <MenuItem value="Rent">Rent</MenuItem>
-                <MenuItem value="EatOut">EatOut</MenuItem>
-                <MenuItem value="Lunch">Lunch</MenuItem>
-                <MenuItem value="Holidays">Holidays</MenuItem>
-                <MenuItem value="Fun">Fun</MenuItem>
+                {
+                  this.state.categories.map((category) => {
+                    return (<MenuItem value={category.name}>{category.name}</MenuItem>)
+                  })
+                }
               </Select>
             </FormControl>
             <TextField
@@ -182,7 +298,8 @@ class AddBucks extends Component {
               margin="normal"
             />
             <Button variant="contained" className={`${classes.button} hover`} onClick={this.addData}>
-              Save
+              <div id="default" className={hiddenDefault} >SAVE</div>
+              <div id="loading" className={hiddenLoading} ></div>
             </Button>
         </Paper>
       </div>

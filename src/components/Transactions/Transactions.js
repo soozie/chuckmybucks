@@ -37,7 +37,7 @@ class Transactions extends Component {
 
   getData() {
     console.log('getting data');
-    api.getExpences()
+    api.getExpenses()
     .then((response) => {
       console.log('setting state', response);
       if (response.length) {

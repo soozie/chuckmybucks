@@ -11,6 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import AddBucks from '../AddBucks/AddBucks.js';
+import AddUser from '../AddUser/AddUser.js';
+import AddCategory from '../AddCategory/AddCategory.js';
 import Transactions from '../Transactions/Transactions.js';
 import './Navigation.css';
 
@@ -74,11 +76,15 @@ class Navigation extends Component {
       case 'reports':
         view = (<Transactions />);
         break;
-      case 'groupExpenses':
+      case 'TripExpenses':
         view = (<div> </div>);
         break;
       case 'addUser':
-        view = (<div> </div>);
+        view = (<AddUser />);
+        break;
+      case 'addCategory':
+        view = (<AddCategory />);
+        break;
         break;
       case 'savings':
         view = (<div> </div>);
@@ -111,11 +117,14 @@ class Navigation extends Component {
             <ListItem className="hover" onClick={() => { this.handleSelectView('reports'); }} button component="a" href="#reports">
               <ListItemText primary="Reports" />
             </ListItem>
-            <ListItem className="hover" onClick={() => { this.handleSelectView('groupExpenses'); }} button component="a" href="#group-expenses">
-              <ListItemText primary="Group Expenses" />
+            <ListItem className="hover" onClick={() => { this.handleSelectView('TripExpenses'); }} button component="a" href="#trip-expenses">
+              <ListItemText primary="Trip Expenses" />
             </ListItem>
             <ListItem className="hover" onClick={() => { this.handleSelectView('addUser'); }} button component="a" href="#add-user">
             <ListItemText primary="Add User" />
+            </ListItem>
+            <ListItem className="hover" onClick={() => { this.handleSelectView('addCategory'); }} button component="a" href="#add-category">
+            <ListItemText primary="Add Category" />
             </ListItem>
             <ListItem className="hover" onClick={() => { this.handleSelectView('savings'); }} button component="a" href="#savings">
               <ListItemText primary="Savings" />

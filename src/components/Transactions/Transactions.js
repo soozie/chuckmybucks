@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import * as api from '../../modules/addBucks/api';
-import TransactionsRender from './TransactionsRender.js';
 
 const styles = theme => ({
   root: {
@@ -72,10 +79,42 @@ class Transactions extends Component {
     } = this.props;
     console.log(this.state.expenses);
     return (
-      <TransactionsRender expenses={this.state.expenses}/>
+      <div className="Transactions">
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell numeric>Amount</TableCell>
+                <TableCell numeric>Date</TableCell>
+                <TableCell numeric>Type</TableCell>
+                <TableCell numeric>Note</TableCell>
+              </TableRow>
+            </TableHead>
+          <TableBody>
+          {
+            this.state.expenses.map(row => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  {row.userName}
+                </TableCell>
+                <TableCell numeric>{row.bucksAmount}</TableCell>
+                <TableCell numeric>{row.when}</TableCell>
+                <TableCell numeric>{row.what}</TableCell>
+                <TableCell numeric>{row.note}</TableCell>
+              </TableRow>
+            ))
+          }
+          </TableBody>
+          </Table>
+        </Paper>
+      </div>
     )
   }
-
 }
 
-export default Transactions;
+Transactions.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Transactions);

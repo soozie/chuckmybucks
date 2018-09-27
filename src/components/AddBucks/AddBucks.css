@@ -4,6 +4,7 @@
   transition: opacity 400ms ease-in-out;
   flex-direction: column;
   margin-bottom: 32px;
+  width: 100%;
 }
 
 .AddBucks--hidden {

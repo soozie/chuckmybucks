@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import * as api from '../../modules/addBucks/api';
-import './AddUser.css';
+import './TripAddMate.css';
 
 const styles = theme => ({
   root: {
@@ -45,12 +45,12 @@ const checkProperties = (obj) => {
   return true;
 }
 
-class AddUser extends Component {
+class TripAddMate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userName: '',
-      salary: '',
+      budget: '',
       requestStatus: 'default'
     };
 
@@ -85,17 +85,17 @@ class AddUser extends Component {
 
     const user = {
       userName: this.state.userName,
-      salary: this.state.salary
+      budget: this.state.budget
     };
 
     if (checkProperties(user)) {
       setTimeout(() => {
-        api.saveUser(user)
+        api.saveTripUser(user)
         .then((users) => {
           console.log(users);
           this.setState({
             userName: '',
-            salary: '',
+            budget: '',
             requestStatus: 'saved'
           });
 
@@ -165,24 +165,24 @@ class AddUser extends Component {
     }
 
     return (
-      <div className='AddUser'>
+      <div className="TripAddMate">
         <Paper className={classes.root} elevation={1}>
             <TextField
               id="username"
-              label="Type a Name"
-              placeholder="User Name"
+              label="User Name"
+              placeholder="Type a Name"
               className={classes.textField}
               value={this.state.userName}
               onChange={(e) => {this.setValue('userName', e.target.value);}}
               margin="normal"
             />
             <TextField
-              id="salary"
-              label="Type an Amount"
-              placeholder="Salary"
+              id="budget"
+              label="Budget"
+              placeholder="Type an Amount"
               className={classes.textField}
-              value={this.state.salary}
-              onChange={(e) => {this.setValue('salary', e.target.value);}}
+              value={this.state.budget}
+              onChange={(e) => {this.setValue('budget', e.target.value);}}
               margin="normal"
             />
             <Button variant="contained" className={`${classes.button} hover`} onClick={this.addData}>
@@ -195,8 +195,8 @@ class AddUser extends Component {
   }
 }
 
-AddUser.propTypes = {
+TripAddMate.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(AddUser);
+export default withStyles(styles)(TripAddMate);

@@ -1,12 +1,11 @@
-.Transactions {
+.TripAddExpense {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 32px;
   opacity: 1;
   transition: opacity 400ms ease-in-out;
-  width: 100%;
+  flex-direction: column;
+  margin-bottom: 32px;
 }
+
 
 #default.hidden,
 #loading.hidden {

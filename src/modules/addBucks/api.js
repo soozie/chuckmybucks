@@ -26,6 +26,66 @@ export function getCategories() {
   .catch(error => { return error; });
 }
 
+
+export function saveTripExpense(expense) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://localhost:4000/api/saveTripExpense`, {
+      method: "POST",
+      body: JSON.stringify(expense),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => { return response.json(); })
+    .then(jsonResponse => {
+      resolve(jsonResponse);
+    })
+    .catch(error => {
+      console.log(error);
+      reject(error);
+    });
+  });
+}
+
+export function saveTripUser(user) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://localhost:4000/api/saveTripUser`, {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => { return response.json(); })
+    .then(jsonResponse => {
+      resolve(jsonResponse);
+    })
+    .catch(error => {
+      console.log(error);
+      reject(error);
+    });
+  });
+}
+
+export function getTripExpenses() {
+  return fetch('http://localhost:4000/api/getTripExpenses')
+  .then(response => { return response.json(); })
+  .then(jsonResponse => {
+    return jsonResponse;
+  })
+  .catch(error => { return error; });
+}
+
+export function getTripUsers() {
+  return fetch('http://localhost:4000/api/getTripUsers')
+  .then(response => { return response.json(); })
+  .then(jsonResponse => {
+    return jsonResponse;
+  })
+  .catch(error => { return error; });
+}
+
+
 export function saveExpense(expense) {
   return new Promise((resolve, reject) => {
     fetch(`http://localhost:4000/api/saveExpense`, {

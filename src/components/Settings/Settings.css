@@ -1,12 +1,12 @@
-.Transactions {
+.Settings {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 32px;
   opacity: 1;
   transition: opacity 400ms ease-in-out;
+  flex-direction: column;
+  margin-bottom: 32px;
   width: 100%;
 }
+
 
 #default.hidden,
 #loading.hidden {

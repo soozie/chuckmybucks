@@ -1,1 +1,1 @@
-{"expenses":[{"userName":"Susa","totalAmount":"200","paidAmount":"120","when":"2018-09-19","what":"EatOut","note":"Pizza","id":"6"}],"users":[{"userName":"Susa","budget":"1500","id":"1"},{"userName":"Nico","budget":"2000","id":"2"},{"userName":"Zlata","budget":"500","id":"3"},{"userName":"Ange","budget":"1500","id":"4"}],"categories":[]}
+{"expenses":[],"users":[],"categories":[]}

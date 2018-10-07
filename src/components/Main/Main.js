@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddBucks from '../AddBucks/AddBucks.js';
-import Transactions from '../Transactions/Transactions.js';
+import Reports from '../Reports/Reports.js';
 import Navigation from '../Navigation/Navigation.js';
 import * as api from '../../modules/addBucks/api';
 import './Main.css';
@@ -53,7 +53,7 @@ class Main extends Component {
           Get Total Bucks
         </Button>
         <Button variant="contained" className={`${classes.button} hover`}>
-          Show Transactions
+          Show Reports
         </Button>
       </div>
     );

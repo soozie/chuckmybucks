@@ -167,28 +167,28 @@ class TripAddMate extends Component {
     return (
       <div className="TripAddMate">
         <Paper className={classes.root} elevation={1}>
-            <TextField
-              id="username"
-              label="User Name"
-              placeholder="Type a Name"
-              className={classes.textField}
-              value={this.state.userName}
-              onChange={(e) => {this.setValue('userName', e.target.value);}}
-              margin="normal"
-            />
-            <TextField
-              id="budget"
-              label="Budget"
-              placeholder="Type an Amount"
-              className={classes.textField}
-              value={this.state.budget}
-              onChange={(e) => {this.setValue('budget', e.target.value);}}
-              margin="normal"
-            />
-            <Button variant="contained" className={`${classes.button} hover`} onClick={this.addData}>
-              <div id="default" className={hiddenDefault} >SAVE</div>
-              <div id="loading" className={hiddenLoading} ></div>
-            </Button>
+          <TextField
+            id="username"
+            label="User Name"
+            placeholder="Type a Name"
+            className={classes.textField}
+            value={this.state.userName}
+            onChange={(e) => {this.setValue('userName', e.target.value);}}
+            margin="normal"
+          />
+          <TextField
+            id="budget"
+            label="Budget"
+            placeholder="Type an Amount"
+            className={classes.textField}
+            value={this.state.budget}
+            onChange={(e) => {this.setValue('budget', e.target.value);}}
+            margin="normal"
+          />
+          <Button variant="contained" className={`${classes.button} hover`} onClick={this.addData}>
+            <div id="default" className={hiddenDefault} >SAVE</div>
+            <div id="loading" className={hiddenLoading} ></div>
+          </Button>
         </Paper>
       </div>
     )

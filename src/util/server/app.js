@@ -46,7 +46,7 @@ const readFile = (err, data) => {
     return false;
   } else {
     dataObj = JSON.parse(data);
-    console.log('Good!');
+    console.log('Good! Loaded data.json.');
     return dataObj;
   }
 }
@@ -61,13 +61,13 @@ const readFile2 = (err, data) => {
     return false;
   } else {
     dataObj = JSON.parse(data);
-    console.log('Good!');
+    console.log('Good! Loaded dataplan.json.');
     return dataObj;
   }
 }
 
 const checkData2 = async () => {
-  fs.readFile('dataplan', 'utf8', readFile2);
+  fs.readFile('dataplan.json', 'utf8', readFile2);
 }
 
 checkData();
@@ -89,29 +89,29 @@ app.post('/api/saveExpense', function(req, res) {
       let newJsonData;
       dataObj = JSON.parse(data);
       if (dataObj.expenses) {
-        const updatedExpenses = [ ...dataObj.expenses ];
         const id = _.uniqueId();
 
-        updatedExpenses.push({
-          userName,
-          bucksAmount,
-          when,
-          what,
-          note,
-          id
-        });
         newJsonData = {
           ...dataObj,
-          expenses: updatedExpenses
+          expenses: [
+            ...dataObj.expenses,
+            {
+              userName,
+              bucksAmount,
+              when,
+              what,
+              note,
+              id
+            }
+          ]
         };
-        fs.writeFile('data.json', JSON.stringify(newJsonData), 'utf8', (attrs) => {});
-        response = updatedExpenses;
+        fs.writeFile('data.json', JSON.stringify(newJsonData), 'utf8', (attrs) => {
+          res.json(newJsonData);
+        });
       } else {
-        response = { error: "We broke!" };
+        res.json({ error: "We broke!" });
       }
     }
-
-    res.json(response);
   });
 });
 

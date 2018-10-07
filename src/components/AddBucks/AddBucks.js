@@ -241,7 +241,7 @@ class AddBucks extends Component {
                 </MenuItem>
                 {
                   this.state.users.map((user) => {
-                    return (<MenuItem value={user.userName}>{user.userName}</MenuItem>)
+                    return (<MenuItem key={user.id} value={user.userName}>{user.userName}</MenuItem>)
                   })
                 }
               </Select>
@@ -283,7 +283,7 @@ class AddBucks extends Component {
                 </MenuItem>
                 {
                   this.state.categories.map((category) => {
-                    return (<MenuItem value={category.name}>{category.name}</MenuItem>)
+                    return (<MenuItem key={category.id} value={category.name}>{category.name}</MenuItem>)
                   })
                 }
               </Select>

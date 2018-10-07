@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import AddBucks from '../AddBucks/AddBucks.js';
 import Settings from '../Settings/Settings.js';
 import TripContainer from '../TripContainer/TripContainer.js';
-import Transactions from '../Transactions/Transactions.js';
+import Reports from '../Reports/Reports.js';
 import './Navigation.css';
 
 const drawerWidth = 240;
@@ -74,7 +74,7 @@ class Navigation extends Component {
         view = (<AddBucks />);
         break;
       case 'reports':
-        view = (<Transactions />);
+        view = (<Reports />);
         break;
       case 'tripContainer':
         view = (<TripContainer />);

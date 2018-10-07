@@ -1,0 +1,29 @@
+.Filters {
+  display: flex;
+  opacity: 1;
+  transition: opacity 400ms ease-in-out;
+  flex-direction: column;
+  margin-bottom: 32px;
+}
+
+
+#default.hidden,
+#loading.hidden {
+  opacity: 0;
+}
+
+#default {
+  opacity: 1;
+}
+
+#loading {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  bottom: auto;
+  top: 50%;
+  width: 32px;
+  height: 28px;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-50%);
+}

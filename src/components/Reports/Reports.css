@@ -1,12 +1,24 @@
-.Transactions {
+.Reports {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 32px;
+  flex-direction: column;
   opacity: 1;
   transition: opacity 400ms ease-in-out;
   width: 100%;
 }
+
+.hiddenTableHead {
+  display: none;
+}
+
+.DataTable {
+  height: 500px;
+}
+
+.TableCell {
+  text-align: center !important;
+}
+
 
 #default.hidden,
 #loading.hidden {
